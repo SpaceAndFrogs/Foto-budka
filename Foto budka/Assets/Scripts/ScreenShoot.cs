@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScreenShoot : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class ScreenShoot : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.ARGB32, false);
 
         texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
 
@@ -30,7 +31,15 @@ public class ScreenShoot : MonoBehaviour
 
         nameOfScreenShoot += ".png";
 
-        File.WriteAllBytes(Application.dataPath + "/Output/" + nameOfScreenShoot, bytes);
+        if (!Directory.Exists(Application.dataPath + "/StreamingAssets/Output"))
+        {
+            
+            Directory.CreateDirectory(Application.dataPath + "/StreamingAssets/Output");
+
+        }
+
+        File.WriteAllBytes(Application.dataPath + "/StreamingAssets/Output/" + nameOfScreenShoot, bytes);
+        
 
         Destroy(texture);
         Ui.SetActive(true);
